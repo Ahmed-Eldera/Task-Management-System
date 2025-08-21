@@ -15,34 +15,33 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    // CREATE
     @PostMapping
     public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
         TaskDTO created = taskService.createTask(taskDTO);
         return ResponseEntity.ok(created);
     }
 
-    // READ (all tasks for a given user id)
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TaskDTO>> getTasks(@PathVariable long userId) {
-        List<TaskDTO> tasks = taskService.getTasks(userId);
+
+    @GetMapping
+    public ResponseEntity<List<TaskDTO>> getTasks() {
+        List<TaskDTO> tasks = taskService.getTasks();
         return ResponseEntity.ok(tasks);
     }
 
-    // UPDATE
+
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(@PathVariable long id, @RequestBody TaskDTO taskDTO) {
-        taskDTO.setId(id); // ensure path id is used
+        taskDTO.setId(id);
         TaskDTO updated = taskService.updateTask(taskDTO);
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable long id) {
         TaskDTO dto = new TaskDTO();
         dto.setId(id);
-        taskService.deleteTask(dto);
+        taskService.deleteTask(dto.getId());
         return ResponseEntity.noContent().build();
     }
 }
