@@ -1,7 +1,7 @@
 package org.der3.Task_Management_System.controller;
 
 import org.der3.Task_Management_System.dto.TaskDTO;
-import org.der3.Task_Management_System.service.TaskService;
+import org.der3.Task_Management_System.service.impl.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
