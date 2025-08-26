@@ -21,6 +21,7 @@ public class TaskMapper {
         taskDTO.setDescription(t.getDescription());
         taskDTO.setStatus(t.getStatus());
         taskDTO.setUser(userMapper.toDTO(t.getUser()));
+        taskDTO.setDueDate(t.getDueDate());
         return taskDTO;
     }
         public Task toEntity(TaskDTO t){
@@ -32,6 +33,7 @@ public class TaskMapper {
         task.setStatus(t.getStatus());
         t.setUser(new UserDTO());
         task.getUser().setId(t.getUser().getId());
+        task.setDueDate(t.getDueDate());
         return task;
     }
     public List<Task> toTaskList(List<TaskDTO> dtoList){

@@ -1,7 +1,8 @@
 package org.der3.Task_Management_System.controller;
 
 import org.der3.Task_Management_System.dto.TaskDTO;
-import org.der3.Task_Management_System.service.impl.TaskService;
+import org.der3.Task_Management_System.model.Status_enum;
+import org.der3.Task_Management_System.service.impl.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 public class TaskController {
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
 @PostMapping
 public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
@@ -23,6 +24,19 @@ public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
 }
 
 
+    @GetMapping("/{status}")
+    public ResponseEntity<List<TaskDTO>> getUserTasks(
+            @PathVariable Status_enum status
+
+    ) {
+        List<TaskDTO> tasks;
+        if (status != null) {
+            tasks = taskService.getTasksByStatus(status);
+        } else {
+            tasks = taskService.getTasks();
+        }
+        return ResponseEntity.ok(tasks);
+    }
 
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getTasks() {
@@ -44,4 +58,5 @@ public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
 }

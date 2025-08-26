@@ -4,20 +4,20 @@ import org.der3.Task_Management_System.dto.TaskDTO;
 import org.der3.Task_Management_System.dto.UserDTO;
 import org.der3.Task_Management_System.mapper.TaskMapper;
 import org.der3.Task_Management_System.mapper.UserMapper;
+import org.der3.Task_Management_System.model.Status_enum;
 import org.der3.Task_Management_System.model.Task;
-import org.der3.Task_Management_System.model.User;
 import org.der3.Task_Management_System.repository.TaskRepository;
 import org.der3.Task_Management_System.repository.UserRepository;
 import org.der3.Task_Management_System.service.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class TaskService implements TaskServiceInterface {
+@Transactional
+public class TaskServiceImpl implements TaskServiceInterface {
 
     @Autowired
     private TaskRepository taskRepo;
@@ -30,7 +30,7 @@ public class TaskService implements TaskServiceInterface {
     @Autowired
     private UserRepository userRepo;
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
 
 //    private User getAuthenticatedUser() {
@@ -48,6 +48,12 @@ public class TaskService implements TaskServiceInterface {
         return taskMapper.toDTO(task);
     }
 
+
+public List<TaskDTO> getTasksByStatus(Status_enum status) {
+        UserDTO user = userService.getAuthenticatedUser();
+        List<Task> tasks = taskRepo.findByUserIdAndStatus(user.getId(),status);
+    return taskMapper.toDTOList(tasks);
+}
 
     public List<TaskDTO> getTasks() {
         UserDTO user = userService.getAuthenticatedUser();
@@ -79,6 +85,7 @@ public class TaskService implements TaskServiceInterface {
         existingTask.setName(taskDto.getName());
         existingTask.setDescription(taskDto.getDescription());
         existingTask.setStatus(taskDto.getStatus());
+        existingTask.setDueDate(taskDto.getDueDate());
         existingTask = taskRepo.save(existingTask);
 
         return taskMapper.toDTO(existingTask);

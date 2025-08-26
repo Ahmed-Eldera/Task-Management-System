@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserServiceInterface {
+public class UserServiceImpl implements UserServiceInterface {
     @Autowired
     private UserRepository userRepo;
     @Autowired
